@@ -7,14 +7,41 @@
     ".": "./index.js",
     "./package.json": "./package.json"
   },
-  "files": ["index.js", "cli.js", "README.md", "CHANGELOG.md", "LICENSE"],
-  "bin": { "bloom-filter": "cli.js" },
+  "files": [
+    "index.js",
+    "cli.js",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "bloom-filter": "cli.js"
+  },
   "scripts": {
     "test": "node --test test.js",
     "prepublishOnly": "npm test"
   },
-  "keywords": ["bloom-filter", "bloom", "filter", "probabilistic", "data-structure", "membership", "counting-bloom", "scalable-bloom", "zero-dependency"],
+  "keywords": [
+    "bloom-filter",
+    "bloom",
+    "filter",
+    "probabilistic",
+    "data-structure",
+    "membership",
+    "counting-bloom",
+    "scalable-bloom",
+    "zero-dependency"
+  ],
   "license": "MIT",
   "author": "sulthonzh",
-  "repository": { "type": "git", "url": "https://github.com/sulthonzh/bloom-filter" }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sulthonzh/bloom-filter"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
