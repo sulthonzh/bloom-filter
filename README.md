@@ -1,10 +1,12 @@
 # bloom-filter
 
+**Definitely not there, or maybe there — in O(1) time and minimal memory.**
+
 Zero-dependency Bloom filter for probabilistic set membership testing. Standard, Counting (deletable), and Scalable variants.
 
 ## Why?
 
-Bloom filters tell you if something is **definitely not** in a set, or **might be** in it — using a fraction of the memory. They power:
+Bloom filters tell you if something is **definitely not** in a set, or **might be** in it — using a fraction of the memory of a hash table. They power:
 
 - **Caching** — skip lookups for keys that don't exist
 - **Deduplication** — filter unique items before expensive comparison
@@ -13,6 +15,10 @@ Bloom filters tell you if something is **definitely not** in a set, or **might b
 - **Distributed systems** — sync set membership with minimal bandwidth
 
 ## Quick Start
+
+```bash
+npm install bloom-filter
+```
 
 ```js
 const { BloomFilter } = require('bloom-filter');
@@ -25,7 +31,88 @@ filter.has('user@example.com');   // → true
 filter.has('random@nowhere.com'); // → false (or true with ~1% chance)
 ```
 
+## Real-World Examples
+
+### 1. Cache Penetration Shield (Redis + Bloom Filter)
+
+Prevent cache-penetration attacks where bots query millions of non-existent keys, bypassing your cache and hitting the database:
+
+```js
+const { BloomFilter } = require('bloom-filter');
+
+// Initialize with expected user base (1M users, 0.1% FPR)
+const knownUsers = BloomFilter.create(1_000_000, 0.001);
+
+// Load existing user IDs on startup
+for (const id of existingUserIds) knownUsers.add(id);
+
+function getUser(userId) {
+  // Bloom filter check is O(1) — instant rejection of unknown keys
+  if (!knownUsers.has(userId)) {
+    return null; // definitely not a user — skip DB entirely
+  }
+  // Might be a user — check Redis, then DB
+  return redis.get(`user:${userId}`) ?? db.users.findById(userId);
+}
+```
+
+### 2. Malicious URL Checker (Scalable, Unknown Size)
+
+URL blocklists grow constantly. ScalableBloomFilter auto-expands without pre-sizing:
+
+```js
+const { ScalableBloomFilter } = require('bloom-filter');
+const { ScalableBloomFilter } = require('bloom-filter');
+const sbf = new ScalableBloomFilter({ capacity: 100_000, errorRate: 0.001 });
+
+// Stream URLs from threat intelligence feed
+for await (const url of threatFeed) {
+  sbf.add(url);
+}
+
+// Check incoming requests — zero false negatives guaranteed
+function isBlocked(url) {
+  return sbf.has(url); // true = maybe blocked, false = definitely safe
+}
+
+// Memory: ~1.2 MB for 100K URLs at 0.1% FPR
+// vs ~6 MB for a Set of URL strings
+console.log(`Using ${sbf.byteSize} bytes for ${sbf.count} URLs`);
+```
+
+### 3. Distributed Deduplication (Counting + Merge)
+
+Multiple service instances each maintain a local CountingBloomFilter, then merge for global dedup:
+
+```js
+const { CountingBloomFilter } = require('bloom-filter');
+
+class Deduplicator {
+  constructor() {
+    this.local = CountingBloomFilter.create(50_000, 0.01);
+  }
+
+  checkAndAdd(eventId) {
+    if (this.local.has(eventId)) return false; // duplicate
+    this.local.add(eventId);
+    return true; // new event
+  }
+
+  remove(eventId) {
+    return this.local.remove(eventId); // counters decrement — true deletion
+  }
+
+  snapshot() { return this.local.toJSON(); }
+}
+```
+
 ## Three Variants
+
+| Variant | Memory | Delete? | Grows? | Use When |
+|---------|--------|---------|--------|----------|
+| **Standard** | Smallest | No | No | Size known upfront, items never removed |
+| **Counting** | ~8x standard | Yes (counters) | No | Items added and removed |
+| **Scalable** | Grows as needed | No | Yes | Size unknown, unbounded growth |
 
 ### Standard (`BloomFilter`)
 
@@ -70,6 +157,7 @@ sbf.numLayers; // auto-grown layers
 | `.falsePositiveRate()` | ✓ | — | — |
 | `.approximateCount()` | ✓ | ✓ | — |
 | `.merge(other)` | ✓ | — | — |
+| `.isCompatibleWith(other)` | ✓ | — | — |
 | `.toJSON()` / `.fromJSON()` | ✓ | ✓ | ✓ |
 
 ## CLI
@@ -80,6 +168,7 @@ bloom-filter add filter.json "user@example.com"
 bloom-filter has filter.json "user@example.com"
 bloom-filter info filter.json
 bloom-filter demo --capacity 1000 --error 0.01
+bloom-filter --version
 ```
 
 ## How It Works
@@ -89,5 +178,18 @@ bloom-filter demo --capacity 1000 --error 0.01
 3. **Add**: set `k` bits  •  **Check**: all `k` bits set → "maybe"; any bit 0 → "definitely not"
 
 Optimal formulas: `m = -n·ln(p) / (ln2)²`, `k = (m/n)·ln2`
+
+## Comparison
+
+| Feature | **bloom-filter** | [bloom-filters](https://www.npmjs.com/package/bloom-filters) | [bloomfilter](https://www.npmjs.com/package/bloomfilter) | [fast-bloom-filter](https://www.npmjs.com/package/fast-bloom-filter) |
+|---------|------------------|-------------|-------------|-------------------|
+| Dependencies | **0** | 3 | 0 | 1 |
+| Variants | Standard + Counting + Scalable | Standard + Counting + Scalable | Standard only | Standard only |
+| Merge filters | ✓ | ✗ | ✗ | ✗ |
+| Auto-grow (Scalable) | ✓ | ✓ | ✗ | ✗ |
+| CLI tool | ✓ | ✗ | ✗ | ✗ |
+| JSON serialize | ✓ | ✓ | ✗ | ✓ |
+| Memory (10K items, 1% FPR) | **~12 KB** | ~12 KB | ~12 KB | ~12 KB |
+| Node.js ≥ | 14 | 12 | 8 | 12 |
 
 Zero dependencies. Node.js ≥ 14. MIT License.

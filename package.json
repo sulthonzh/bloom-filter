@@ -1,10 +1,18 @@
 {
   "name": "bloom-filter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Zero-dependency Bloom filter for probabilistic set membership testing — standard, counting (deletable), and scalable variants",
   "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["index.js", "cli.js", "README.md", "CHANGELOG.md", "LICENSE"],
   "bin": { "bloom-filter": "cli.js" },
-  "scripts": { "test": "node --test test.js" },
+  "scripts": {
+    "test": "node --test test.js",
+    "prepublishOnly": "npm test"
+  },
   "keywords": ["bloom-filter", "bloom", "filter", "probabilistic", "data-structure", "membership", "counting-bloom", "scalable-bloom", "zero-dependency"],
   "license": "MIT",
   "author": "sulthonzh",

@@ -31,9 +31,10 @@ Options:
 function parseArgs(argv) {
   const args = { _: [], options: {} };
   for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === '-V') { args.options.V = true; continue; }
     if (argv[i].startsWith('--')) {
       const key = argv[i].slice(2);
-      if (argv[i+1] && !argv[i+1].startsWith('--')) { args.options[key] = argv[++i]; }
+      if (argv[i+1] && !argv[i+1].startsWith('--') && !argv[i+1].startsWith('-')) { args.options[key] = argv[++i]; }
       else args.options[key] = true;
     } else args._.push(argv[i]);
   }
@@ -56,6 +57,11 @@ function output(data, outFile) {
 const { _, options } = parseArgs(process.argv.slice(2));
 const cmd = _[0];
 
+// Check for version/help flags before anything else
+if (options.version || options.V || _[0] === '-V') {
+  console.log(require('./package.json').version);
+  process.exit(0);
+}
 if (!cmd || cmd === 'help' || options.help) { usage(); process.exit(0); }
 
 const capacity = parseInt(options.capacity || '1000', 10);
