@@ -4,14 +4,14 @@ const { BloomFilter, CountingBloomFilter, ScalableBloomFilter } = require('./ind
 const fs = require('fs');
 
 function usage() {
-  console.log(`bloom-filter — Probabilistic set membership testing
+  console.log(`bloom-filter-x — Probabilistic set membership testing
 
 Usage:
-  bloom-filter create [--capacity N] [--error P] [--type standard|counting|scalable]
-  bloom-filter add <filter.json> <item> [--out FILE]
-  bloom-filter has <filter.json> <item>
-  bloom-filter info <filter.json>
-  bloom-filter demo [--capacity N] [--error P]
+  bloom-filter-x create [--capacity N] [--error P] [--type standard|counting|scalable]
+  bloom-filter-x add <filter.json> <item> [--out FILE]
+  bloom-filter-x has <filter.json> <item>
+  bloom-filter-x info <filter.json>
+  bloom-filter-x demo [--capacity N] [--error P]
 
 Commands:
   create    Create a new empty filter

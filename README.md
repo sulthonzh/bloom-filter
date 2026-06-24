@@ -1,4 +1,4 @@
-# bloom-filter
+# bloom-filter-x
 
 **Definitely not there, or maybe there — in O(1) time and minimal memory.**
 
@@ -17,11 +17,11 @@ Bloom filters tell you if something is **definitely not** in a set, or **might b
 ## Quick Start
 
 ```bash
-npm install bloom-filter
+npm install bloom-filter-x
 ```
 
 ```js
-const { BloomFilter } = require('bloom-filter');
+const { BloomFilter } = require('bloom-filter-x');
 
 const filter = BloomFilter.create(10000, 0.01); // 10k items, 1% FPR
 
@@ -38,7 +38,7 @@ filter.has('random@nowhere.com'); // → false (or true with ~1% chance)
 Prevent cache-penetration attacks where bots query millions of non-existent keys, bypassing your cache and hitting the database:
 
 ```js
-const { BloomFilter } = require('bloom-filter');
+const { BloomFilter } = require('bloom-filter-x');
 
 // Initialize with expected user base (1M users, 0.1% FPR)
 const knownUsers = BloomFilter.create(1_000_000, 0.001);
@@ -61,8 +61,7 @@ function getUser(userId) {
 URL blocklists grow constantly. ScalableBloomFilter auto-expands without pre-sizing:
 
 ```js
-const { ScalableBloomFilter } = require('bloom-filter');
-const { ScalableBloomFilter } = require('bloom-filter');
+const { ScalableBloomFilter } = require('bloom-filter-x');
 const sbf = new ScalableBloomFilter({ capacity: 100_000, errorRate: 0.001 });
 
 // Stream URLs from threat intelligence feed
@@ -85,7 +84,7 @@ console.log(`Using ${sbf.byteSize} bytes for ${sbf.count} URLs`);
 Multiple service instances each maintain a local CountingBloomFilter, then merge for global dedup:
 
 ```js
-const { CountingBloomFilter } = require('bloom-filter');
+const { CountingBloomFilter } = require('bloom-filter-x');
 
 class Deduplicator {
   constructor() {
@@ -163,12 +162,12 @@ sbf.numLayers; // auto-grown layers
 ## CLI
 
 ```bash
-bloom-filter create --capacity 10000 --out filter.json
-bloom-filter add filter.json "user@example.com"
-bloom-filter has filter.json "user@example.com"
-bloom-filter info filter.json
-bloom-filter demo --capacity 1000 --error 0.01
-bloom-filter --version
+bloom-filter-x create --capacity 10000 --out filter.json
+bloom-filter-x add filter.json "user@example.com"
+bloom-filter-x has filter.json "user@example.com"
+bloom-filter-x info filter.json
+bloom-filter-x demo --capacity 1000 --error 0.01
+bloom-filter-x --version
 ```
 
 ## How It Works
@@ -181,7 +180,7 @@ Optimal formulas: `m = -n·ln(p) / (ln2)²`, `k = (m/n)·ln2`
 
 ## Comparison
 
-| Feature | **bloom-filter** | [bloom-filters](https://www.npmjs.com/package/bloom-filters) | [bloomfilter](https://www.npmjs.com/package/bloomfilter) | [fast-bloom-filter](https://www.npmjs.com/package/fast-bloom-filter) |
+| Feature | **bloom-filter-x** | [bloom-filters](https://www.npmjs.com/package/bloom-filters) | [bloomfilter](https://www.npmjs.com/package/bloomfilter) | [fast-bloom-filter](https://www.npmjs.com/package/fast-bloom-filter) |
 |---------|------------------|-------------|-------------|-------------------|
 | Dependencies | **0** | 3 | 0 | 1 |
 | Variants | Standard + Counting + Scalable | Standard + Counting + Scalable | Standard only | Standard only |

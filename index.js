@@ -331,4 +331,6 @@ class ScalableBloomFilter {
   }
 }
 
-module.exports = { BloomFilter, CountingBloomFilter, ScalableBloomFilter, computeBitSize, computeHashCount, hash32, serialize };
+const VERSION = '1.1.0';
+
+module.exports = { BloomFilter, CountingBloomFilter, ScalableBloomFilter, computeBitSize, computeHashCount, hash32, serialize, VERSION };

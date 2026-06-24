@@ -1,5 +1,5 @@
 {
-  "name": "bloom-filter",
+  "name": "bloom-filter-x",
   "version": "1.1.0",
   "description": "Zero-dependency Bloom filter for probabilistic set membership testing — standard, counting (deletable), and scalable variants",
   "main": "index.js",
@@ -15,14 +15,14 @@
     "LICENSE"
   ],
   "bin": {
-    "bloom-filter": "cli.js"
+    "bloom-filter-x": "cli.js"
   },
   "scripts": {
     "test": "node --test test.js",
     "prepublishOnly": "npm test"
   },
   "keywords": [
-    "bloom-filter",
+    "bloom-filter-x",
     "bloom",
     "filter",
     "probabilistic",
