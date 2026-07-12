@@ -255,14 +255,15 @@ test('serialize: handles all types', () => {
 
 // Version flag test
 const { execFileSync } = require('child_process');
+const { join } = require('node:path');
 
 test('CLI: --version flag outputs version', () => {
-  const out = execFileSync('node', ['cli.js', '--version'], { encoding: 'utf-8' }).trim();
+  const out = execFileSync('node', [join(__dirname, 'cli.js'), '--version'], { encoding: 'utf-8' }).trim();
   assert.match(out, /^1\.1\.\d+$/);
 });
 
 test('CLI: -V flag outputs version', () => {
-  const out = execFileSync('node', ['cli.js', '-V'], { encoding: 'utf-8' }).trim();
+  const out = execFileSync('node', [join(__dirname, 'cli.js'), '-V'], { encoding: 'utf-8' }).trim();
   assert.match(out, /^1\.1\.\d+$/);
 });
 
