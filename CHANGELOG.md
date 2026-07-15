@@ -12,7 +12,7 @@
 - Added `--version` / `-V` flag to CLI.
 - Added `exports` field, `files` field, `prepublishOnly` script to `package.json`.
 - 3 real-world README examples + comparison table.
-- 24 new tests (34 → 58 total).
+- 19 new tests (34 → 53 total).
 
 ## v1.0.0 (2026-06-15)
 
