@@ -18,7 +18,7 @@
     "bloom-filter-x": "cli.js"
   },
   "scripts": {
-    "test": "node --test test.js",
+    "test": "node --test test.js test/cli.test.js",
     "prepublishOnly": "npm test"
   },
   "keywords": [
