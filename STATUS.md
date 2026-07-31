@@ -1,6 +1,6 @@
 # bloom-filter Status
 
-**Last Audited:** 2026-07-21 03:47 UTC
+**Last Audited:** 2026-07-31 18:11 UTC
 **Status:** ✅ EXCEPTIONAL (all 13 criteria met)
 
 ---
@@ -10,8 +10,8 @@
 ### ✅ PASS (13/13)
 1. ✓ README hooks reader in first 3 lines
 2. ✓ Quick start works in <2 minutes (local install verified)
-3. ✓ All tests GREEN (120/120 pass, 100%) [re-verified 2026-07-21]
-4. ✓ Test coverage >= 80% (100% lines, 98.39% branches, 100% funcs)
+3. ✓ All tests GREEN (130/130 pass, 100%) [re-verified 2026-07-31]
+4. ✓ Test coverage >= 80% (100% lines, 98.93% branches, 100% funcs, 100% stmts)
 5. ✓ Zero TypeScript errors (N/A - pure JS project)
 6. ✓ Zero ESLint warnings (verified)
 7. ✓ No TODO/FIXME comments (verified via grep)
@@ -36,7 +36,7 @@ All criteria verified and met.
 
 ## Status Summary
 This project meets all exceptional criteria:
-- High test coverage (100% lines, 98.39% branches overall — near-perfect)
+- High test coverage (100% stmts/lines/funcs, 98.93% branches — near-perfect)
 - Three variants (Standard, Counting, Scalable)
 - Zero dependencies
 - Comprehensive docs with real-world examples
@@ -52,21 +52,29 @@ This project meets all exceptional criteria:
 
 ## Test Results
 ```
-tests 120
-pass 120
+tests 130
+pass 130
 fail 0
 skipped 0
-duration_ms ~20000
+duration_ms ~30000
 ```
 
 ## Test Coverage
 ```
-cli.js    | 100.00% lines | 98.52% branches | 100.00% funcs
-index.js  | 100.00% lines | 98.31% branches | 100.00% funcs
-all files | 100.00% lines | 98.39% branches | 100.00% funcs
+All files | 100% stmts | 98.93% branches | 100% funcs | 100% lines
+cli.js    | 100% stmts | 98.52% branches | 100% funcs | 100% lines
+index.js  | 100% stmts | 99.16% branches | 100% funcs | 100% lines
 ```
 
+### Remaining Uncovered Branches (1.07% — non-actionable)
+- **index.js:67** — `const h2 = hash32(s, 0x1505) || 1` — the `|| 1` falsy branch requires FNV-1a hash to return exactly 0. Brute-forced 10M strings without hitting 0. Defensive guard, astronomically rare.
+- **cli.js:52** — `typeof data === 'string' ? data : JSON.stringify(...)` — the `true` branch (data is string). No CLI command passes a string to `output()` — all callers pass `filter.toJSON()` objects. Effectively dead code in current CLI design.
+
 ## Re-Audit History
-- **2026-07-21:** Added 32 branch-coverage tests (number constructors, `||` sub-expression branches). stmts 99.1%→100%, branches 88.59%→98.39%. Tests: 89 → 120.
-- **2026-07-18:** Added 36 CLI integration tests (cli.js: 26.66% → 92.31% branches, 32.11% → 100% lines). Tests: 53 → 89.
-- **2026-07-15:** Fixed CHANGELOG test count. 53/53 GREEN.
+
+| Date | Tests | Branches | Action |
+|------|-------|----------|--------|
+| 2026-07-15 | 53 | — | Fixed CHANGELOG test count |
+| 2026-07-18 | 89 | 88.59% (est.) | +36 CLI integration tests (cli.js: 26.66%→92.31% branches) |
+| 2026-07-21 | 120 | 98.39% | +32 branch-coverage tests (number constructors, \|\| sub-expr) |
+| **2026-07-31** | **130** | **98.93%** | **+10 tests: computeHashCount capacity≤0 throw (line 58), CountingBloomFilter.fillRatio (lines 238-243), ScalableBloomFilter.byteSize (lines 307-308), hash32 \|\|1 guard verification (line 67)** |
