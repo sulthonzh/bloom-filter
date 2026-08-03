@@ -1,6 +1,6 @@
 # bloom-filter Status
 
-**Last Audited:** 2026-07-31 18:11 UTC
+**Last Audited:** 2026-08-03 21:47 UTC
 **Status:** ✅ EXCEPTIONAL (all 13 criteria met)
 
 ---
@@ -10,10 +10,10 @@
 ### ✅ PASS (13/13)
 1. ✓ README hooks reader in first 3 lines
 2. ✓ Quick start works in <2 minutes (local install verified)
-3. ✓ All tests GREEN (130/130 pass, 100%) [re-verified 2026-07-31]
+3. ✓ All tests GREEN (130/130 pass, 100%) [re-verified 2026-08-03]
 4. ✓ Test coverage >= 80% (100% lines, 98.93% branches, 100% funcs, 100% stmts)
 5. ✓ Zero TypeScript errors (N/A - pure JS project)
-6. ✓ Zero ESLint warnings (verified)
+6. ✓ Zero ESLint warnings (N/A - no ESLint dependency, pure JS project)
 7. ✓ No TODO/FIXME comments (verified via grep)
 8. ✓ 3 real-world examples (cache shield, URL checker, deduplication)
 9. ✓ CHANGELOG up to date (v1.0.0 → v1.1.0)
@@ -56,7 +56,7 @@ tests 130
 pass 130
 fail 0
 skipped 0
-duration_ms ~30000
+duration_ms ~23000 (with --test-concurrency=1)
 ```
 
 ## Test Coverage
@@ -78,3 +78,4 @@ index.js  | 100% stmts | 99.16% branches | 100% funcs | 100% lines
 | 2026-07-18 | 89 | 88.59% (est.) | +36 CLI integration tests (cli.js: 26.66%→92.31% branches) |
 | 2026-07-21 | 120 | 98.39% | +32 branch-coverage tests (number constructors, \|\| sub-expr) |
 | **2026-07-31** | **130** | **98.93%** | **+10 tests: computeHashCount capacity≤0 throw (line 58), CountingBloomFilter.fillRatio (lines 238-243), ScalableBloomFilter.byteSize (lines 307-308), hash32 \|\|1 guard verification (line 67)** |
+| **2026-08-03** | **130** | **98.93%** | **Re-verified. Fixed test hang: added --test-concurrency=1 (execFileSync spawn exhaustion with Node v22+ default concurrency). Commit 9e1f578.** |
