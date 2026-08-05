@@ -1,0 +1,51 @@
+export default [
+  {
+    ignores: ['node_modules/', 'coverage/', 'eslint.config.mjs'],
+  },
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'commonjs',
+      globals: {
+        // Node.js globals
+        process: 'readonly',
+        console: 'readonly',
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        exports: 'readonly',
+        global: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        setImmediate: 'readonly',
+        clearImmediate: 'readonly',
+        URL: 'readonly',
+        TextEncoder: 'readonly',
+        TextDecoder: 'readonly',
+        queueMicrotask: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-undef': 'error',
+      'no-redeclare': 'error',
+      'prefer-const': 'error',
+      'no-constant-condition': 'error',
+      'no-dupe-keys': 'error',
+      'no-duplicate-case': 'error',
+      'no-empty': ['error', { allowEmptyCatch: true }],
+      'no-irregular-whitespace': 'error',
+      'no-unreachable': 'error',
+      'use-isnan': 'error',
+      'valid-typeof': 'error',
+    },
+  },
+  {
+    ignores: ['node_modules/', 'coverage/'],
+  },
+];

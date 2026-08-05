@@ -16,10 +16,7 @@ function run(args, opts = {}) {
   });
 }
 
-function runJson(args) {
-  return JSON.parse(run(args));
-}
-
+// runJson removed (unused)
 // ─── Help / Version ─────────────────────────────────────────────
 
 test('CLI: --version outputs version', () => {

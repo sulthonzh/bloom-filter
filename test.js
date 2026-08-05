@@ -4,9 +4,9 @@ const assert = require('node:assert');
 const { BloomFilter, CountingBloomFilter, ScalableBloomFilter, computeBitSize, computeHashCount, hash32, serialize } = require('./index');
 
 // Access internal helpers for testing
-const { setBit, getBit } = (() => {
+const { setBit } = (() => {
   // Re-create from module pattern for testing purposes
-  const bf = new BloomFilter({ bitSize: 16, hashCount: 1 });
+  void new BloomFilter({ bitSize: 16, hashCount: 1 });
   return {
     setBit: (arr, p) => { arr[p >> 3] |= (1 << (p & 7)); },
     getBit: (arr, p) => { return (arr[p >> 3] & (1 << (p & 7))) !== 0; }
